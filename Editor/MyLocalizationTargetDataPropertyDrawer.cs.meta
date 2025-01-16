@@ -1,0 +1,12 @@
+fileFormatVersion: 2
+guid: dbfc4552424084d6b88523fb7afa5499
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _mainTargetDataPropertyDrawerAsset: {fileID: 9197481963319205126, guid: 331d3a64b45d84c818f4ea87e7df21cd, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

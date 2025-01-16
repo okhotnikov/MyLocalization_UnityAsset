@@ -1,0 +1,9 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <engine:VisualElement name="VisualElement" style="flex-grow: 0;">
+        <engine:VisualElement style="flex-grow: 0; flex-direction: row; justify-content: flex-start; flex-wrap: nowrap; white-space: normal; align-items: stretch; align-self: auto; align-content: flex-start; max-width: 100%;">
+            <engine:Label text="test" name="localizationTagLabel" selectable="true" enable-rich-text="false" emoji-fallback-support="false" display-tooltip-when-elided="false" language-direction="LTR" style="min-width: 200px; -unity-text-align: middle-left; flex-shrink: 1; -unity-font-style: bold; font-size: 11px; color: rgb(197, 197, 197); margin-right: 6px; padding-bottom: 2px; padding-top: 2px; margin-top: 2px;" />
+            <engine:Label text="test" name="localizationTextLabel" selectable="true" enable-rich-text="true" emoji-fallback-support="true" display-tooltip-when-elided="false" style="text-overflow: clip; white-space: normal; -unity-text-outline-width: 0; align-items: stretch; flex-wrap: nowrap; justify-content: flex-start; align-self: auto; align-content: auto; flex-direction: column; -unity-text-align: upper-left; flex-shrink: 1; font-size: 10px; margin-left: 6px; padding-top: 2px; padding-bottom: 2px; margin-top: 2px;" />
+        </engine:VisualElement>
+        <engine:VisualElement style="flex-grow: 0; height: 1px; background-color: rgb(14, 14, 14); margin-top: 2px; margin-bottom: 2px; justify-content: center; align-self: stretch; align-items: center;" />
+    </engine:VisualElement>
+</engine:UXML>

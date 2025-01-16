@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 75aff0cd8fab74389b76d651e1eda852
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - m_ViewDataDictionary: {instanceID: 0}
+  - _mainViewContainerAsset: {fileID: 9197481963319205126, guid: 05b6bb9242a8c43ca89a5d0775d9dcc8, type: 3}
+  - _settingsContainerAsset: {fileID: 9197481963319205126, guid: 818dfb0050dc2442dab7268aca0d7f12, type: 3}
+  - _shortSettingsContainerAsset: {fileID: 9197481963319205126, guid: 61051bfaf893c4ffc99d4f467d6201af, type: 3}
+  - _tabDictionaryViewAsset: {fileID: 9197481963319205126, guid: 118941a38979849c2bc56af57b337fa3, type: 3}
+  - _localizationTagViewAsset: {fileID: 9197481963319205126, guid: 81075870e6dba4d3998eccf938fb370d, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

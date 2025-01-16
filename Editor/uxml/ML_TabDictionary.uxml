@@ -1,0 +1,8 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <engine:VisualElement style="flex-grow: 1; margin-top: 0; margin-left: 0; margin-right: 0; margin-bottom: 0; border-top-color: rgb(176, 176, 176); border-left-color: rgb(176, 176, 176); border-bottom-color: rgb(176, 176, 176); border-right-color: rgb(176, 176, 176); border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-top-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 5px; border-bottom-left-radius: 5px; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px;">
+        <engine:VisualElement name="translatePairsViewContainer" style="width: auto; -unity-font-style: bold; font-size: 12px; background-color: rgba(0, 0, 0, 0); height: auto; margin-left: 15px; margin-right: 15px; margin-top: 10px; margin-bottom: 10px;" />
+        <engine:VisualElement name="buttonsViewContainer" style="flex-grow: 0; margin-top: 10px; margin-bottom: 10px; flex-basis: auto; margin-left: 10px; margin-right: 10px; flex-direction: row; justify-content: flex-end;">
+            <engine:Button text="Sort" name="sortButton" style="height: auto; font-size: 12px; -unity-font-style: bold;" />
+        </engine:VisualElement>
+    </engine:VisualElement>
+</engine:UXML>

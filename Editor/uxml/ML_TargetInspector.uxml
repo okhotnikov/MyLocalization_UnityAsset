@@ -1,0 +1,13 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <engine:VisualElement name="headerViewContainer" style="flex-grow: 0; margin-left: 10px; margin-top: 10px; margin-right: 10px; margin-bottom: 10px; flex-direction: row; justify-content: space-between;">
+        <engine:VisualElement name="LeftVisualContainer" style="flex-grow: 0; align-self: auto; align-items: flex-start; justify-content: center;">
+            <engine:Label text="TextMeshPro - MyLocalizationTarget" name="headerSubname" enable-rich-text="false" style="font-size: 14px; -unity-font-style: bold; -unity-text-align: middle-left; color: rgb(166, 166, 166); align-items: flex-start;" />
+        </engine:VisualElement>
+        <engine:VisualElement name="rightVisualContainer" style="flex-grow: 0; align-items: stretch;">
+            <engine:Label text="MyLocalization" name="header" style="font-size: 18px; -unity-font-style: bold; -unity-text-align: middle-right;" />
+            <engine:Label text="Label" name="activeDictionaryLabel" />
+        </engine:VisualElement>
+    </engine:VisualElement>
+    <engine:VisualElement name="targetViewContainer" style="flex-grow: 0; margin-top: 5px;" />
+    <engine:VisualElement name="dataViewContainer" style="flex-grow: 0; margin-top: 5px;" />
+</engine:UXML>
