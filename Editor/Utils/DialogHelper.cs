@@ -13,15 +13,5 @@ namespace MyLocalization.Editor
         {
             return EditorUtility.DisplayDialog(title, message, "Yes", "No");
         }
-
-        public static void ShowProgress(string title, string message, float progress)
-        {
-            EditorUtility.DisplayProgressBar(title, message, progress);
-        }
-
-        public static void HideProgress()
-        {
-            EditorUtility.ClearProgressBar();
-        }
     }
 }
