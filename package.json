@@ -14,6 +14,12 @@
     },
     "keywords": [
         "localization",
-        "localize"
-    ]
+        "localize",
+        "MyLocalization",
+        "unity"
+    ],
+    "license": "MIT",
+    "licensesUrl": "https://github.com/okhotnikov/MyLocalization_UnityAsset/blob/main/LICENSE.md",
+    "changelogUrl": "https://github.com/okhotnikov/MyLocalization_UnityAsset/releases",
+    "documentationUrl": "https://github.com/okhotnikov/MyLocalization_UnityAsset"
 }

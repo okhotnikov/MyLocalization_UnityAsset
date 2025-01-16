@@ -1,7 +1,6 @@
 namespace MLoc.Targets
 {
     using TMPro;
-    using Unity.VisualScripting;
     using UnityEngine;
 
     [AddComponentMenu("MyLocalization/TextMeshPro-MyLocalizationTarget")]

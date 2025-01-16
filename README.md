@@ -1,5 +1,5 @@
 # MyLocalization_UnityAsset
-![GitHub License](https://img.shields.io/github/license/okhotnikov/MyLocalization_UnityAsset)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/okhotnikov/MyLocalization_UnityAsset) ![GitHub License](https://img.shields.io/github/license/okhotnikov/MyLocalization_UnityAsset)
 
 A powerful and easy-to-use localization system for Unity projects. Designed to simplify the management of multilingual content in games and applications.
 
@@ -12,6 +12,12 @@ A powerful and easy-to-use localization system for Unity projects. Designed to s
 https://github.com/okhotnikov/MyLocalization_UnityAsset.git
 
 Alternatively, clone the repository directly and place it in your `Packages` folder.
+
+Using .tgz archive
+1. Download the archive [com.yourname.mypackage-0.1.0.tgz](https://github.com/yourname/repository/releases/download/v0.1.0/com.yourname.mypackage-0.1.0.tgz).
+2. In Unity, open `Window > Package Manager`.
+3. Click `+ > Add package from tarball...`.
+4. Select the downloaded file.
 
 ## Usage
 
@@ -56,3 +62,6 @@ public class Example : MonoBehaviour
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 For information about third-party libraries and their licenses, see [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md).
+
+## Latest Release
+[Download v0.1.0](https://github.com/okhotnikov/MyLocalization_UnityAsset/releases/tag/v0.1.0)
