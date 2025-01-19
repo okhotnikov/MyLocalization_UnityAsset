@@ -10,3 +10,7 @@
 
 ### Changed
 - Improved code structure for better usability.
+
+## [0.1.0] - 2025-01-16
+### Fixed
+Fix calling RecordPrefabInstancePropertyModifications from OnValidate

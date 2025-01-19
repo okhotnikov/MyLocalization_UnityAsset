@@ -16,6 +16,7 @@ namespace MLoc.Targets
         {
 #if UNITY_EDITOR
             TryUpdateLocalization(out _);
+            SetDirty();
 #endif
         }
 
@@ -50,6 +51,8 @@ namespace MLoc.Targets
         protected virtual void EnableInternal()
         {
             TryUpdateLocalization(out _);
+            SetDirty();
+            RecordPrefabInstancePropertyModifications();
 
             MyLocalization.Instance.OnDictionaryChanged += UpdateLocalization;
             MyLocalization.Instance.OnLanguageChanged += UpdateLocalization;
@@ -91,7 +94,7 @@ namespace MLoc.Targets
 
             newLocalizedText = tag.LocalizedText;
             SetLocalizedText(newLocalizedText);
-            SetDirty();
+
             return true;
         }
 
@@ -101,8 +104,20 @@ namespace MLoc.Targets
 
         private void SetDirty()
         {
+            if (Application.isPlaying)
+                return;
+
             SetDirty(this);
             SetDirty(Target);
+        }
+
+        private void RecordPrefabInstancePropertyModifications()
+        {
+            if (Application.isPlaying)
+                return;
+
+            RecordPrefabInstancePropertyModifications(this);
+            RecordPrefabInstancePropertyModifications(Target);
         }
 
         private void SetDirty(UnityEngine.Object obj)
@@ -112,6 +127,15 @@ namespace MLoc.Targets
 
 #if UNITY_EDITOR
             UnityEditor.EditorUtility.SetDirty(obj);
+#endif
+        }
+
+        private void RecordPrefabInstancePropertyModifications(UnityEngine.Object obj)
+        {
+            if (obj == null)
+                return;
+
+#if UNITY_EDITOR
             UnityEditor.PrefabUtility.RecordPrefabInstancePropertyModifications(obj);
 #endif
         }

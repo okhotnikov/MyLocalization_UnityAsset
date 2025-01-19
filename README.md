@@ -14,7 +14,7 @@ https://github.com/okhotnikov/MyLocalization_UnityAsset.git
 Alternatively, clone the repository directly and place it in your `Packages` folder.
 
 Using .tgz archive
-1. Download the archive [com.yourname.mypackage-0.1.0.tgz](https://github.com/yourname/repository/releases/download/v0.1.0/com.yourname.mypackage-0.1.0.tgz).
+1. Download the archive [com.yourname.mypackage-0.1.1.tgz](https://github.com/yourname/repository/releases/download/v0.1.1/com.yourname.mypackage-0.1.1.tgz).
 2. In Unity, open `Window > Package Manager`.
 3. Click `+ > Add package from tarball...`.
 4. Select the downloaded file.
@@ -64,4 +64,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 For information about third-party libraries and their licenses, see [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md).
 
 ## Latest Release
-[Download v0.1.0](https://github.com/okhotnikov/MyLocalization_UnityAsset/releases/tag/v0.1.0)
+[Download v0.1.1](https://github.com/okhotnikov/MyLocalization_UnityAsset/releases/tag/v0.1.1)
