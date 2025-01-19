@@ -14,7 +14,7 @@ https://github.com/okhotnikov/MyLocalization_UnityAsset.git
 Alternatively, clone the repository directly and place it in your `Packages` folder.
 
 Using .tgz archive
-1. Download the archive [com.yourname.mypackage-0.1.1.tgz](https://github.com/yourname/repository/releases/download/v0.1.1/com.yourname.mypackage-0.1.1.tgz).
+1. Download the archive [com.eokhotnikov.mylocalization-0.1.1](https://github.com/yourname/repository/releases/download/v0.1.1/com.eokhotnikov.mylocalization-0.1.1.tgz).
 2. In Unity, open `Window > Package Manager`.
 3. Click `+ > Add package from tarball...`.
 4. Select the downloaded file.
