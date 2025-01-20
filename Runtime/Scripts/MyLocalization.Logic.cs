@@ -143,6 +143,8 @@ namespace MLoc
                     _localizationLinks.Add(link);
             }
 
+            NotifyAndRemoveDuplicates();
+
             _isSynced = true;
         }
 
@@ -160,6 +162,32 @@ namespace MLoc
                 {
                     _dictionaryLangCodes.Add(langCode);
                 }
+            }
+        }
+
+        private void NotifyAndRemoveDuplicates()
+        {
+            var duplicates = _localizationLinks
+                .GroupBy(link => link)
+                .Where(group => group.Count() > 1)
+                .Select(group => new { Link = group.Key, Count = group.Count() })
+                .ToList();
+
+            if (duplicates.Any())
+            {
+                Console.WriteLine("Duplicates found:");
+
+                foreach (var duplicate in duplicates)
+                {
+                    Console.WriteLine($"Tag: {duplicate.Link.LocalizedTag}, Count: {duplicate.Count}");
+                }
+
+                _localizationLinks = _localizationLinks.Distinct().ToList();
+                Console.WriteLine("Duplicates removed.");
+            }
+            else
+            {
+                Console.WriteLine("Duplicates not found.");
             }
         }
 
