@@ -1,25 +1,25 @@
 {
-    "name": "com.eokhotnikov.mylocalization",
-    "version": "${{ env.version }}",
-    "displayName": "MyLocalization",
-    "description": "MyLocalization is a package for Unity that provides a simple way to localize your project.",
-    "unity": "2023.2",
-    "author": {
-        "name": "Evgenii Okhotnikov",
-        "url": "https://github.com/okhotnikov"
-    },
-    "dependencies": {
-        "com.unity.textmeshpro": "5.0.0",
-        "com.unity.nuget.newtonsoft-json": "3.2.1"
-    },
-    "keywords": [
-        "localization",
-        "localize",
-        "MyLocalization",
-        "unity"
-    ],
-    "license": "MIT",
-    "licensesUrl": "https://github.com/okhotnikov/MyLocalization_UnityAsset/blob/main/LICENSE.md",
-    "changelogUrl": "https://github.com/okhotnikov/MyLocalization_UnityAsset/releases",
-    "documentationUrl": "https://github.com/okhotnikov/MyLocalization_UnityAsset"
+  "name": "com.eokhotnikov.mylocalization",
+  "version": "0.1.2",
+  "displayName": "MyLocalization",
+  "description": "MyLocalization is a package for Unity that provides a simple way to localize your project.",
+  "unity": "2023.2",
+  "author": {
+    "name": "Evgenii Okhotnikov",
+    "url": "https://github.com/okhotnikov"
+  },
+  "dependencies": {
+    "com.unity.textmeshpro": "5.0.0",
+    "com.unity.nuget.newtonsoft-json": "3.2.1"
+  },
+  "keywords": [
+    "localization",
+    "localize",
+    "MyLocalization",
+    "unity"
+  ],
+  "license": "MIT",
+  "licensesUrl": "https://github.com/okhotnikov/MyLocalization_UnityAsset/blob/main/LICENSE.md",
+  "changelogUrl": "https://github.com/okhotnikov/MyLocalization_UnityAsset/releases",
+  "documentationUrl": "https://github.com/okhotnikov/MyLocalization_UnityAsset"
 }
