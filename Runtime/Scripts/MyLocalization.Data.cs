@@ -9,6 +9,15 @@ namespace MLoc
     [Serializable]
     public partial class MyLocalization
     {
+        private static readonly Dictionary<string, Func<double, double, double>> Operations = new()
+        {
+            { "+", (x, y) => x + y },
+            { "-", (x, y) => x - y },
+            { "*", (x, y) => x * y },
+            { "/", (x, y) => x / y },
+            { "%", (x, y) => (x / y) * 100 }
+        };
+
         [SerializeField] private List<MyLocalizationLink> _localizationLinks = new ();
         [SerializeField] private List<LanguageCode> _dictionaryLangCodes = new ();
         [SerializeField] private MyLocalizationDictionary _dictionary = new (LanguageCode.xx);
@@ -87,6 +96,15 @@ namespace MLoc
         public IEnumerable<LanguageCode> DictionaryLangCodes => _dictionaryLangCodes ?? new List<LanguageCode>();
 
         public IEnumerable<string> DictionaryNames => _dictionaryLangCodes == null ? new List<string>() : _dictionaryLangCodes.Select(p => p.ToString());
+
         public IEnumerable<string> DictionarySystemNames => _dictionaryLangCodes == null ? new List<string>() : _dictionaryLangCodes.Select(p => Settings.GetSystemLanguage(p).ToString());
+
+        public struct ReplaceNumberParamsArg
+        {
+            public string key;
+            public object value;
+            public string customFormat;
+            public object result;
+        }
     }
 }

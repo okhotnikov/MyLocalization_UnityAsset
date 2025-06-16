@@ -13,31 +13,96 @@ namespace MLoc
 
     public partial class MyLocalization
     {
-        public static MyLocalization Load()
+        private static string LoadDataJson() => FileUtils.LoadResourceAsString(Settings.DataFileName, Settings.DataAssetsFilePath);
+
+        private static MyLocalization CreateEmptyLocalization()
         {
-            try
+            var config = new MyLocalization();
+            config.InitByDefault();
+            return config;
+        }
+
+        private void NotifyAndRemoveDuplicates()
+        {
+            var duplicates = _localizationLinks
+                .GroupBy(link => link)
+                .Where(group => group.Count() > 1)
+                .Select(group => new { Link = group.Key, Count = group.Count() })
+                .ToList();
+
+            if (duplicates.Any())
             {
-                var dataJson = LoadDataJson();
-                if (!string.IsNullOrEmpty(dataJson))
+                Console.WriteLine("Duplicates found:");
+
+                foreach (var duplicate in duplicates)
                 {
-                    var parserData = JsonUtility.FromJson<MyLocalization>(dataJson);
-                    if (parserData != null)
-                    {
-                        var config = CreateEmptyLocalization();
-                        config = parserData;
-                        config.SetLoaded();
-                        return config;
-                    }
+                    Console.WriteLine($"Tag: {duplicate.Link.LocalizedTag}, Count: {duplicate.Count}");
                 }
+
+                _localizationLinks = _localizationLinks.Distinct().ToList();
+                Console.WriteLine("Duplicates removed.");
             }
-            catch (Exception ex)
+            else
             {
-                Debug.LogError($"{Settings.DataFileName} is corrupted. Falling back to default configuration.");
-                Debug.LogException(ex);
-                return null;
+                Console.WriteLine("Duplicates not found.");
+            }
+        }
+
+        private string GetTranslationValueRecursive(string langCode, string key, JObject jvalue, bool isEnglish, JObject dict)
+        {
+            var enValue = GetTranslationValueExact(jvalue, Settings.EnglishCodeString);
+            if (enValue.StartsWith("$"))
+            {
+                var nestedKey = enValue.Substring(1);
+                var nestedValue = (JObject)dict[nestedKey];
+                return GetTranslationValueRecursive(langCode, nestedKey, nestedValue, isEnglish, dict);
             }
 
-            return null;
+            var stringValue = isEnglish ? enValue : GetTranslationValueExact(jvalue, langCode);
+            if (!string.IsNullOrEmpty(stringValue))
+                return stringValue;
+
+            Debug.LogWarning($"Missing {langCode} translation, key <{key}>");
+            return $"#{key}#";
+        }
+
+        private string GetTranslationValueExact(JObject valueObject, string code)
+        {
+            var translationToken = valueObject[code];
+            return (string)((JValue)translationToken).Value;
+        }
+
+        private object ParseOperand(string operand, params (string key, object value)[] args)
+        {
+            if (operand.EndsWith("%"))
+                operand = operand.Remove(operand.Length - 2);
+
+            if (double.TryParse(operand, out var constant))
+                return constant;
+
+            foreach (var arg in args)
+                if (operand.Equals(arg.key))
+                    return arg.value;
+
+            throw new ArgumentException($"Localization: incorrect operand {operand}");
+        }
+
+        private object ParseOperand(string operand, params ReplaceNumberParamsArg[] args)
+        {
+            if (operand.EndsWith("%"))
+                operand = operand.Remove(operand.Length - 2);
+
+            if (double.TryParse(operand, out var result))
+                return result;
+
+            for (var i = 0; i < args.Length; i++)
+            {
+                var t = args[i];
+                if (operand.Equals(t.key))
+                    return t.value;
+            }
+
+            throw new ArgumentException("Localization: incorrect operand " + operand);
         }
 
         public void Sync()
@@ -93,16 +158,6 @@ namespace MLoc
 #else
             Debug.LogWarning("Save is only available in the Unity Editor.");
 #endif
-        }
-
-        public static string Get(int key)
-        {
-            return key.ToString();
-        }
-
-        public static string Get(string key)
-        {
-            return Instance.GetLocalized(key);
         }
 
         public void NotifyDictionaryChanged(MyLocalizationDictionary dictionary)
@@ -163,138 +218,6 @@ namespace MLoc
                     _dictionaryLangCodes.Add(langCode);
                 }
             }
-        }
-
-        private void NotifyAndRemoveDuplicates()
-        {
-            var duplicates = _localizationLinks
-                .GroupBy(link => link)
-                .Where(group => group.Count() > 1)
-                .Select(group => new { Link = group.Key, Count = group.Count() })
-                .ToList();
-
-            if (duplicates.Any())
-            {
-                Console.WriteLine("Duplicates found:");
-
-                foreach (var duplicate in duplicates)
-                {
-                    Console.WriteLine($"Tag: {duplicate.Link.LocalizedTag}, Count: {duplicate.Count}");
-                }
-
-                _localizationLinks = _localizationLinks.Distinct().ToList();
-                Console.WriteLine("Duplicates removed.");
-            }
-            else
-            {
-                Console.WriteLine("Duplicates not found.");
-            }
-        }
-
-        private string GetTranslationValueRecursive(string langCode, string key, JObject jvalue, bool isEnglish, JObject dict)
-        {
-            var enValue = GetTranslationValueExact(jvalue, Settings.EnglishCodeString);
-            if (enValue.StartsWith("$"))
-            {
-                var nestedKey = enValue.Substring(1);
-                var nestedValue = (JObject)dict[nestedKey];
-                return GetTranslationValueRecursive(langCode, nestedKey, nestedValue, isEnglish, dict);
-            }
-
-            var stringValue = isEnglish ? enValue : GetTranslationValueExact(jvalue, langCode);
-            if (!string.IsNullOrEmpty(stringValue))
-                return stringValue;
-
-            Debug.LogWarning($"Missing {langCode} translation, key <{key}>");
-            return $"#{key}#";
-        }
-
-        private string GetTranslationValueExact(JObject valueObject, string code)
-        {
-            var translationToken = valueObject[code];
-            return (string)((JValue)translationToken).Value;
-        }
-
-        private static string LoadDataJson()
-        {
-            return FileUtils.LoadResourceAsString(Settings.DataFileName, Settings.DataAssetsFilePath);
-        }
-
-        public static JObject LoadDictionaryJson()
-        {
-            var dictionaryBytes = FileUtils.LoadResourceAsBytes(Settings.DictionaryFileName, Settings.DictionaryAssetsFilePath);
-            if (dictionaryBytes == null)
-            {
-                Debug.LogWarning($"{Settings.DictionaryFileName} not found or empty.");
-                return null;
-            }
-
-            try
-            {
-                return JsonUtils.GetJsonFromBytes(dictionaryBytes, false);
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError($"{Settings.DictionaryFileName} is corrupted. Falling back to default dictionary.");
-                Debug.LogException(ex);
-                return null;
-            }
-        }
-
-        public static Dictionary<string, Dictionary<string, string>> ParseJObject(JObject jObject)
-        {
-            var dict = new Dictionary<string, Dictionary<string, string>>();
-            foreach (var token in jObject)
-            {
-                var translationKey = token.Key;
-                var jValue = (JObject)token.Value;
-
-                foreach (var lang in jValue)
-                {
-                    if (!dict.ContainsKey(lang.Key))
-                        dict[lang.Key] = new Dictionary<string, string>();
-
-                    dict[lang.Key][translationKey] = lang.Value.ToString();
-                }
-            }
-
-            return dict;
-        }
-
-        public static Dictionary<LanguageCode, string> ReadLanguageNamesInDictionary(JObject jobject)
-        {
-            Dictionary<LanguageCode, string> languageNames = new();
-            var token = jobject["language.name"];
-            if (token == null)
-            {
-                Debug.LogWarning("No language names found in dictionary.");
-                return languageNames;
-            }
-
-            var dict = (IDictionary<string, JToken>)token;
-            var keys = new List<string>(dict.Keys);
-            keys.Sort();
-
-            foreach (var key in keys)
-            {
-                if (!Enum.TryParse(key, out LanguageCode langCode))
-                    continue;
-
-                var value = dict[key];
-                if (value.Type == JTokenType.String)
-                {
-                    languageNames[langCode] = value.ToString();
-                }
-            }
-
-            return languageNames;
-        }
-
-        private static MyLocalization CreateEmptyLocalization()
-        {
-            var config = new MyLocalization();
-            config.InitByDefault();
-            return config;
         }
 
         public void InitByDefault()
@@ -380,6 +303,58 @@ namespace MLoc
             return false;
         }
 
+        public string ReplaceNumberParams(string content, string defaultFormat, params ReplaceNumberParamsArg[] args)
+        {
+            var stringBuilder = new StringBuilder(content);
+
+            for (var i = 0; i < args.Length; i++)
+            {
+                ReplaceNumberParamsArg a = args[i];
+                var format = string.IsNullOrEmpty(a.customFormat) ? defaultFormat : a.customFormat;
+                stringBuilder.Replace("{" + a.key + "}", string.Format(format, a.value));
+            }
+
+            var text = stringBuilder.ToString();
+            if (!Regex.IsMatch(text, @"\{[^{}]*\}"))
+                return text;
+
+            return Regex.Replace(text, @"\{([^{}]*)\}", delegate (Match match)
+            {
+                var value = match.Groups[1].Value;
+                var array2 = value.Split(' ');
+                if (array2.Length != 3)
+                    throw new ArgumentException("Incorrect expression: " + value);
+
+                if (!Operations.TryGetValue(array2[2], out var value2))
+                    throw new ArgumentException("Incorrect operation: " + array2[2]);
+
+                var val = ParseOperand(array2[0], args);
+                var val2 = ParseOperand(array2[1], args);
+                return string.Format(defaultFormat, value2(ToDouble(val), ToDouble(val2)).ToString(CultureInfo.InvariantCulture));
+            });
+
+            double ToDouble(object val)
+            {
+                double result;
+                if (val is not int value)
+                {
+                    if (val is not double num)
+                        throw new InvalidCastException($"format {content}, invalid value: {val}");
+
+                    result = num;
+                }
+                else
+                {
+                    result = Convert.ToDouble(value);
+                }
+                return result;
+            }
+        }
+
+        public static string Get(int key) => key.ToString();
+
+        public static string Get(string key) => Instance.GetLocalized(key);
+
         public string GetLocalized(string key)
         {
             if (string.IsNullOrEmpty(key))
@@ -398,19 +373,9 @@ namespace MLoc
             return $"#{key}#";
         }
 
-        public string GetLocalizedFormat(string format, params object[] args)
-        {
-            return string.Format(GetLocalized(format), args);
-        }
+        public static string GetFormat(string format, params object[] args) => Instance.GetLocalizedFormat(format, args);
 
-        private static readonly Dictionary<string, Func<double, double, double>> Operations = new()
-        {
-            { "+", (x, y) => x + y },
-            { "-", (x, y) => x - y },
-            { "*", (x, y) => x * y },
-            { "/", (x, y) => x / y },
-            { "%", (x, y) => (x / y) * 100 }
-        };
+        public string GetLocalizedFormat(string format, params object[] args) => string.Format(GetLocalized(format), args);
 
         public string ReplaceNumberParams(string content, string returnFormat, params (string key, object value)[] args)
         {
@@ -449,19 +414,106 @@ namespace MLoc
             });
         }
 
-        private object ParseOperand(string operand, params (string key, object value)[] args)
+        public static MyLocalization Load()
         {
-            if (operand.EndsWith("%"))
-                operand = operand.Remove(operand.Length - 2);
+            try
+            {
+                var dataJson = LoadDataJson();
+                if (!string.IsNullOrEmpty(dataJson))
+                {
+                    var parserData = JsonUtility.FromJson<MyLocalization>(dataJson);
+                    if (parserData != null)
+                    {
+                        var cfg = CreateEmptyLocalization();
+                        cfg = parserData;
+                        cfg.SetLoaded();
+                        return cfg;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"{Settings.DataFileName} is corrupted. Falling back to default configuration.");
+                Debug.LogException(ex);
+                return null;
+            }
 
-            if (double.TryParse(operand, out var constant))
-                return constant;
+            return null;
+        }
 
-            foreach (var arg in args)
-                if (operand.Equals(arg.key))
-                    return arg.value;
+        public static JObject LoadDictionaryJson()
+        {
+            var dictionaryBytes = FileUtils.LoadResourceAsBytes(Settings.DictionaryFileName, Settings.DictionaryAssetsFilePath);
+            if (dictionaryBytes == null)
+            {
+                Debug.LogWarning($"{Settings.DictionaryFileName} not found or empty.");
+                return null;
+            }
 
-            throw new ArgumentException($"Localization: incorrect operand {operand}");
+            try
+            {
+                return JsonUtils.GetJsonFromBytes(dictionaryBytes, false);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"{Settings.DictionaryFileName} is corrupted. Falling back to default dictionary.");
+                Debug.LogException(ex);
+                return null;
+            }
+        }
+
+        public static Dictionary<string, Dictionary<string, string>> ParseJObject(JObject jObject)
+        {
+            var dict = new Dictionary<string, Dictionary<string, string>>();
+            foreach (var (translationKey, value) in jObject)
+            {
+                var jValue = (JObject)value;
+
+                if (jValue == null)
+                {
+                    Debug.LogWarning($"Translation key '{translationKey}' has null value in the dictionary.");
+                    continue;
+                }
+
+                foreach (var lang in jValue)
+                {
+                    if (!dict.ContainsKey(lang.Key))
+                        dict[lang.Key] = new Dictionary<string, string>();
+
+                    dict[lang.Key][translationKey] = lang.Value.ToString();
+                }
+            }
+
+            return dict;
+        }
+
+        public static Dictionary<LanguageCode, string> ReadLanguageNamesInDictionary(JObject jObject)
+        {
+            Dictionary<LanguageCode, string> languageNames = new();
+            var token = jObject["language.name"];
+            if (token == null)
+            {
+                Debug.LogWarning("No language names found in dictionary.");
+                return languageNames;
+            }
+
+            var dict = (IDictionary<string, JToken>)token;
+            var keys = new List<string>(dict.Keys);
+            keys.Sort();
+
+            foreach (var key in keys)
+            {
+                if (!Enum.TryParse(key, out LanguageCode langCode))
+                    continue;
+
+                var value = dict[key];
+                if (value.Type == JTokenType.String)
+                {
+                    languageNames[langCode] = value.ToString();
+                }
+            }
+
+            return languageNames;
         }
     }
 }
