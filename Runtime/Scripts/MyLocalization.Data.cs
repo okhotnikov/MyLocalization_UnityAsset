@@ -27,6 +27,9 @@ namespace MLoc
         [SerializeField] private bool _logsEnabled;
         [SerializeField] private bool _inverseSorting;
 
+        private LanguageCode _runtimeLangCode = LanguageCode.xx;
+        private Dictionary<string, string> _runtimeDictionary = new ();
+
         private bool _isLoaded = false;
         private bool _isSynced = false;
 
@@ -52,6 +55,11 @@ namespace MLoc
 
                 if (_instance.IsLoaded && !_instance.IsSynced)
                     _instance.Sync();
+
+                if (Application.isPlaying)
+                {
+                    _instance.ConvertToRuntimeMode();
+                }
 
                 if (_instance == null)
                 {

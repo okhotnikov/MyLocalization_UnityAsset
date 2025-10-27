@@ -105,6 +105,15 @@ namespace MLoc
             throw new ArgumentException("Localization: incorrect operand " + operand);
         }
 
+        private void ConvertToRuntimeMode()
+        {
+            _runtimeLangCode = _dictionary.LangCode;
+            foreach (var pair in _dictionary.TranslatePairs)
+                _runtimeDictionary.Add(pair.LocalizedTag, pair.LocalizedText);
+
+            _dictionary = new (LanguageCode.xx);
+        }
+
         public void Sync()
         {
             var dictionaryJObject = LoadDictionaryJson();
@@ -135,9 +144,11 @@ namespace MLoc
 
         public void ForceReload()
         {
+#if UNITY_EDITOR
             _instance = null;
             _instance = Load();
             Sync();
+#endif
         }
 
         public void Save()
@@ -252,33 +263,6 @@ namespace MLoc
                 changed = true;
             }
 
-            if (_dictionaryLangCodes.Count == 0)
-            {
-                TryNotify();
-                return;
-            }
-
-            // if (!MyLocalizationService.IsAllPalettesHasGuid(_palettes))
-            // {
-            //     ColorPaletteService.UpdatePalettesGuid(_palettes);
-            //     changed = true;
-            // }
-
-            // foreach (var paletteData in _palettes)
-            // {
-            //     if (paletteData.HasUnUsedColors(_colorLinks, out var guids))
-            //     {
-            //         paletteData.RemoveColors(guids);
-            //         changed = true;
-            //     }
-            //
-            //     if (paletteData.HasMissedColors(_colorLinks))
-            //     {
-            //         paletteData.FixMissedColors(_colorLinks);
-            //         changed = true;
-            //     }
-            // }
-
             TryNotify();
 
             return;
@@ -292,6 +276,18 @@ namespace MLoc
 
         public bool TryGet(string key, out string result)
         {
+            if (Application.isPlaying)
+            {
+                if (_runtimeDictionary != null && _runtimeDictionary.TryGetValue(key, out var value))
+                {
+                    result = value;
+                    return true;
+                }
+
+                result = null;
+                return false;
+            }
+
             var text = _dictionary?.TranslatePairs.FirstOrDefault(a => a.LocalizedTag.Equals(key));
             if (text != null)
             {
