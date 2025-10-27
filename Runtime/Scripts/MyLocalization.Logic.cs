@@ -111,7 +111,9 @@ namespace MLoc
             foreach (var pair in _dictionary.TranslatePairs)
                 _runtimeDictionary.Add(pair.LocalizedTag, pair.LocalizedText);
 
+#if !UNITY_EDITOR
             _dictionary = new (LanguageCode.xx);
+#endif
         }
 
         public void Sync()
@@ -195,6 +197,9 @@ namespace MLoc
             var isEnglish = activeLangCode == LanguageCode.en;
 
             _dictionary = new MyLocalizationDictionary(activeLangCode);
+            _runtimeDictionary = new Dictionary<string, string>();
+            _runtimeLangCode = activeLangCode;
+
             foreach (var token in dictionaryJObject)
             {
                 var translationKey = token.Key;

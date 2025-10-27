@@ -54,11 +54,13 @@ namespace MLoc
                 }
 
                 if (_instance.IsLoaded && !_instance.IsSynced)
+                {
                     _instance.Sync();
 
-                if (Application.isPlaying)
-                {
-                    _instance.ConvertToRuntimeMode();
+                    if (Application.isPlaying)
+                    {
+                        _instance.ConvertToRuntimeMode();
+                    }
                 }
 
                 if (_instance == null)

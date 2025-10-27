@@ -10,8 +10,6 @@ namespace MLoc.Targets
         [SerializeField] protected MyLocalizationTarget _data = new();
         protected virtual UnityEngine.Object Target { get; } = null;
 
-        protected MyLocalizationDictionary ActiveDictionary => MyLocalization.Instance.ActiveDictionary;
-
         protected virtual void OnValidate()
         {
 #if UNITY_EDITOR
@@ -73,26 +71,18 @@ namespace MLoc.Targets
         {
             newLocalizedText = string.Empty;
 
-            var dictionary = ActiveDictionary;
-            if (dictionary == null)
-            {
-                Debug.LogError("Main dictionary is null", this);
-                return false;
-            }
-
             if (string.IsNullOrEmpty(_data.TagGuid))
             {
                 return false;
             }
 
-            var tag = dictionary.GetTagByGuid(_data.TagGuid);
-            if (tag == null)
+            if (!MyLocalization.Instance.TryGet(_data.TagGuid, out var localizedText))
             {
                 Debug.LogError($"Localized text with GUID='{_data.TagGuid}' not found in database", this);
                 return false;
             }
 
-            newLocalizedText = tag.LocalizedText;
+            newLocalizedText = localizedText;
             SetLocalizedText(newLocalizedText);
 
             return true;
