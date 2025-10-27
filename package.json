@@ -1,6 +1,6 @@
 {
   "name": "com.eokhotnikov.mylocalization",
-  "version": "0.1.4",
+  "version": "0.1.7",
   "displayName": "MyLocalization",
   "description": "MyLocalization is a package for Unity that provides a simple way to localize your project.",
   "unity": "2023.2",

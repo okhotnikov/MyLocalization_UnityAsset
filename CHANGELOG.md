@@ -1,3 +1,3 @@
 # Changelog
 
-- feat(AccessData): Convert locDict from list to dict (784a679)
+- fix(LocalizationTarget): access to localization throw tryget value (0ad0537)
